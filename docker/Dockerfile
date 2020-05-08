@@ -32,14 +32,14 @@ RUN mkdir -p /home/Tensegrity \
     cd /home/Tensegrity
 
 WORKDIR /home/Tensegrity
-RUN git clone https://github.com/hany606/Tensegrity-Robotics.git --branch Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper
+RUN git clone https://github.com/hany606/tensegrity-vertical-stability.git
 
-CMD ["/home/Tensegrity/Tensegrity-Robotics/bin/setup_helper.sh" ]
+CMD ["/home/Tensegrity/tensegrity-vertical-stability/bin/setup_helper.sh" ]
 
 RUN Xvfb :3 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &> xvfb.log &
 RUN export DISPLAY=:3
 
-CMD ["/home/Tensegrity/Tensegrity-Robotics/bin/build.sh" ]
+CMD ["/home/Tensegrity/tensegrity-vertical-stability/bin/build.sh" ]
 
 RUN export TENSEGRITY_HOME="/home/Tensegrity/Tensegrity-Robotics/"
 

@@ -2,7 +2,7 @@
 
 Before Learning             |  After Learning
 :-------------------------:|:-------------------------:
-![Unstable Hopper](https://github.com/hany606/Tensegrity-Robotics/blob/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/jumper/media/unstable_hopper.gif)  | ![Stable Hopper](https://github.com/hany606/Tensegrity-Robotics/blob/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/jumper/media/stable_hopper.gif)
+![Unstable Hopper](https://github.com/hany606/tensegrity-vertical-stability/blob/master/src/dev/jumper/media/unstable_hopper.gif)  | ![Stable Hopper](https://github.com/hany606/tensegrity-vertical-stability/blob/master/src/dev/jumper/media/stable_hopper.gif)
 
 This repository contains an original source code for the [Learning Stabilizing Control Policies for a Tensegrity Hopper with Augmented Random Search](https://arxiv.org/abs/2004.02641) paper.
 
@@ -64,7 +64,7 @@ A. Through installing the specific packages and the libraries:
 
 	```bash
 
-	cd Tensegrity-Robotics
+	cd tensegrity-vertical-stability
 
 	```
 
@@ -120,7 +120,7 @@ A. Through installing the specific packages and the libraries:
 
 	For example:
 	```bash
-	export TENSEGRITY_HOME="/home/Tensegrity-Robotics"
+	export TENSEGRITY_HOME="/home/tensegrity-vertical-stability"
 	```
 
 	b. To make the command of building the structure faster and easier, put the following into .bashrc to create an alias for the command which is responsible for building the structures executable files:
@@ -131,7 +131,7 @@ A. Through installing the specific packages and the libraries:
 
 	For example:
 	```bash
-	alias tensegrityBuild="/home/Tensegrity-Robotics/bin/build.sh'
+	alias tensegrityBuild="/home/tensegrity-vertical-stability/bin/build.sh'
 	```
 
 8. Install the custom gym environment for Tensegrity
@@ -228,7 +228,7 @@ c. Augmented Random Search hyperparameters
 
 ## Train it!
 
-Inside "[src/dev/gym-tensegrity/learning_scripts/rllib/training_scripts/](https://github.com/hany606/Tensegrity-Robotics/tree/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/gym-tensegrity/learning_scripts/rllib/training_scripts)", there is a script that has been used for training.
+Inside "[src/dev/gym-tensegrity/learning_scripts/rllib/training_scripts/](https://github.com/hany606/tensegrity-vertical-stability/tree/master/src/dev/gym-tensegrity/learning_scripts/rllib/training_scripts)", there is a script that has been used for training.
 
 ```bash
 python3 training.py
@@ -238,7 +238,7 @@ This is the exact script that was used to obtain the results presented here.
 
 ## Evaluate it!
 
-Inside "[src/dev/gym-tensegrity/learning_scripts/rllib](https://github.com/hany606/Tensegrity-Robotics/tree/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/gym-tensegrity/learning_scripts/rllib)", there is the script which has been used for evaluating the trained model
+Inside "[src/dev/gym-tensegrity/learning_scripts/rllib](https://github.com/hany606/tensegrity-vertical-stability/tree/master/src/dev/gym-tensegrity/learning_scripts/rllib)", there is the script which has been used for evaluating the trained model
 
 ```bash
 python3 evaluate.py --agent-path=<path-to-trained-agent> --checkpoint-num=xx
@@ -269,9 +269,9 @@ python3 evaluate.py --evaluation-file=trained_agents/train_025_rep_act1_restL/AR
   
 ## Pretrained Agents
 
-Inside "[src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents](https://github.com/hany606/Tensegrity-Robotics/tree/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents)", there is the successful agent that has been trained with the checkpoints, tfevents file, the parameters for the training and the progress log
+Inside "[src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents](https://github.com/hany606/tensegrity-vertical-stability/tree/master/src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents)", there is the successful agent that has been trained with the checkpoints, tfevents file, the parameters for the training and the progress log
 
-- [train_025_rep_act1_restL/ARS_jumper_29224120_2020-01-21_19-35-20j61sj43o](https://github.com/hany606/Tensegrity-Robotics/tree/Learning-Stabilizing-Control-Policies-for-a-Tensegrity-Hopper-with-Augmented-Random-Search-paper/src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents/train_025_rep_act1_restL/ARS_jumper_29224120_2020-01-21_19-35-20j61sj43o): The configuration of the gym_tensegrity and the parameters for ARS are included in params.json
+- [train_025_rep_act1_restL/ARS_jumper_29224120_2020-01-21_19-35-20j61sj43o](https://github.com/hany606/tensegrity-vertical-stability/tree/master/src/dev/gym-tensegrity/learning_scripts/rllib/trained_agents/train_025_rep_act1_restL/ARS_jumper_29224120_2020-01-21_19-35-20j61sj43o): The configuration of the gym_tensegrity and the parameters for ARS are included in params.json
 
 ## Citation
 

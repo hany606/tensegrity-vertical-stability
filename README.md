@@ -110,7 +110,7 @@ A. Through installing the specific packages and the libraries:
 	./build/examples/3_prism/AppPrismModel
 	```
 
-7. Prepare the environment
+6. Prepare the environment
 
 	a. Put the following into .bashrc or run it every time to define the home directory for the repository directory
 
@@ -134,13 +134,13 @@ A. Through installing the specific packages and the libraries:
 	alias tensegrityBuild="/home/tensegrity-vertical-stability/bin/build.sh'
 	```
 
-8. Install the custom gym environment for Tensegrity
+7. Install the custom gym environment for Tensegrity
 
 ```bash
 ./bin/setup_gym_env.sh
 ```
 
-Note: instead of running step 4 and step 8, it is possible just to run:
+Note: instead of running step 4 and step 7, it is possible just to run:
 
 ```bash
 ./bin/setup_helper.sh

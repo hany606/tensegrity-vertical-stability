@@ -1,0 +1,7 @@
+*.egg-info
+*.pyc
+.idea
+/logs
+/gym_tensegrity/envs/record*
+/gym_tensegrity/envs/records_testing/*
+/gym_tensegrity/envs/old_versions

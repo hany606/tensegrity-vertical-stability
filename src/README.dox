@@ -1,0 +1,209 @@
+/** \mainpage NTRT Simulator Documentation
+	\tableofcontents
+	\section welc Welcome!
+	The NASA Tensegrity Robotics Toolkit (NTRT) is a collection of C++ and
+	MATLAB software modules for the modeling, simulation, and control of
+	Tensegrity Robots. The NTRT Simulator is a tensegrity-specific simulator
+	built to run ontop of the Bullet Physics Engine, version 2.82.
+	\section start Getting Started
+	If you haven't already, follow the instructions in INSTALL (in the
+	root directory, above source) to get the simulator setup and
+	built.
+	\subsection prism Three Strut Prism
+	Once the simulator is built, navigate to build/examples/3_prism
+	and run AppPrismModel. You should see a three strut tensegrity
+	prism. You can use your mouse to grab and move the structure in
+	space. Depending on the forces it may collapse, you can either move
+	it again or reset by pressing spacebar. A full list of keyboard commands
+	is available at \ref keys.
+	
+	If you want to dive into the source code, look at the folder
+	src/examples/3_prism. A tensegrity application needs two classes and
+	a main in order to run. The first class is the model of the actual
+	tensegrity, which in this case is PrismModel. The second class is 
+	a controller. PrismModel is using the general purpose controller
+	PretensionController which is located in src/controllers.
+	Finally, the main in AppPrismModel configures the world and simulation
+	using the classes tgWorld, tgSimViewGraphics, and tgSimulation. See
+	the comments in main for more details and an example.
+	
+	\section build Creating a new tensegrity - tgcreator
+	If you look at the source code for PrismModel, you can see the how
+	we define and construct the tensegrities in PrismModel's setup
+	function. This uses the tools in \ref tgcreator to specify the
+	exterior points of the prism as six nodes. The nodes are then
+	paired into the three rods that cross through the interior of the
+	prism, and the nine muscles that line the outside. Specifications
+	are then given for the rods and muscles. Similar specifications
+	can also be used to create boxes and spheres.
+	Finally the PretensionController is applied to each string.
+	
+	The following examples demonstrate more features of \ref tgcreator
+	and our core library.
+	
+	\subsection superball Six Strut Icosahedron
+	T6Model, also known as the Icosahedron or SuperBall, demonstrates
+	a number of other features of the simulator. First, the ground is
+	set at an angle using the tgBoxGround class and parameters set in
+	AppSuperBall. Second, the controller deals directly with the top
+	level model, and is attached in the app. This demonstrates how to
+	use tgCast to sort sub-models and pass them to controllers.
+	
+	\subsection tetraspine Nested Tetrahedrons
+	The NestedStructureTestModel adds another layer of complexity to
+	our tensegrity models. First, we are no longer building class one
+	tensegrities - rigid bars have been joined together into a compound
+	object. This is due to the autoCompound functions, see the tgcreator
+	library for more information. 
+	Second, this object has been repeated in a nested chain
+	through a for loop in the addSegments function.
+	This allows for the creation of arbitrarily large
+	spine-like structures, and demonstrates the use of sub-structures.
+	Multiple for loops could create appendages in multiple directions.
+	Finally, the model makes better use of the tagging system,
+	by using tags to sort muscles into groups (see mapMuscles)
+	
+	The controller, NestedStructureSineWaves also utilizes the ImpedanceControl
+	class to determine the tension for the strings.
+	
+	\subsection spines learningSpines
+	All four of the models in this directory used our machine learning
+	framework to determine parameters, which have been uploaded as examples
+	of the kinds of motion these structures are capable of. The default
+	parameters can be run just by running the executable. The learning
+	applicaitons also take a parameter set as argv, so if you wanted to
+	try to learn a new set of parameters you could run
+	"AppFlemonsSpineLearning 1" to write to bestParameters-1_*.nnw.
+	More information on configuring learning can be found at \ref learning
+	and \ref config_full.
+	
+	These models were published in the paper
+	Brian T. Mirletz, In-Won Park, Thomas E. Flemons, Adrian K. Agogino, Roger D. Quinn, and Vytas SunSpiral,
+    <a href="http://www.sunspiral.org/vytas/cv/6WCSCM_snake_published.pdf">“Design and Control of Modular Spine-Like Tensegrity Structures”</a>, 
+    Proceedings of The 6th World Conference of the International Association for Structural Control and Monitoring (6WCSCM), Barcelona, Spain, July 2014.
+    
+    \subsection contribute Contributing
+    Please contact ntrtdev-owner [at] lists [dot] nasa [dot] gov if you 
+    wish to contribute to the NASA Tensegrity Robotics Toolkit and be 
+    added to the Github developers team. NTRT is Apache 2 licensed. 
+    Due to NASA policy, all contributors will also need to complete a 
+    <a href="https://ti.arc.nasa.gov/m/groups/intelligent-robotics/ntrt/NTRT%20Ind%20CLA.pdf">
+    Individual Contributor License Agreement (CLA)</a>.
+    and send it to the 
+    address specified on the form. Organizations that would like to 
+    support this work can also get broad agreement for employees to 
+    contribute by completing the <a href="https://ti.arc.nasa.gov/m/groups/intelligent-robotics/ntrt/NTRT%20Corp%20CLA.pdf">
+    Corporate Contributor License Agreement</a>. 
+    Please send any questions to ntrtdev-owner [at] lists [dot] nasa [dot] gov.
+    
+    <a href="https://docs.google.com/document/d/18gA03CjOnLOKXO2njqE5roW0y3vtTAQwoOghsBH7I1Q/edit?usp=sharing">FAQ for new developers</a> 
+    
+    \version 1.1.0
+*/
+
+/**
+ \page tutorials Tutorials 
+ If you're a new user you may find NTRT's tutorials to be a better starting point than the Doxygen documentation. As of version 1.1 the tutorials are fairly bare, but we'll be actively adding content in the coming months. Tutorials can be found on NTRT's <a href="http://ntrtsim.readthedocs.org/en/latest/">ReadTheDocs page</a>.
+*/
+
+/**
+ \page contributors Contributors
+ The NASA Tensegrity Robotics Toolkit has taken contributions from a 
+ number of students and others supported by various fellowships, institutes
+ and internships. The following is a list of the main contributors to this software:
+
+| <center>Name</center> | <center>Organization</center> | <center>E-Mail</center> |
+| :---- | :----: | ----: |
+| Ryan Adams | Cyan Data Systems | radams (at) cyandata.com |
+| Adrian Agogino | UC Santa Cruz/NASA Ames Research Center | adrian.k.agogino (at) nasa.gov |
+| Perry Bhandal | Queen's University | perry.bhandal (at) queensu.ca |
+| Lee Brownston | SGT Inc./NASA Ames Research Center | Lee.S.Brownston (at) nasa.gov |
+| Jonathan Bruce | USRA/UC Santa Cruz | jbruce (at) soe.ucsc.edu |
+| Ken Caluwaerts | Ghent University/FWO | ken (at) caluwaerts.eu |
+| Jérémie Despraz | Ecole Polytechnique Fédérale de Lausanne | jer.despraz (at) gmail.com |
+| Jeffrey Friesen | UC San Diego | jfriesen (at) ucsd.edu |
+| Atil Iscen | Oregon State University | atiliscen (at) gmail.com |
+| Steven Lessard | UC Santa Cruz | slessard (at) ucsc.edu |
+| Brian Mirletz | Case Western Reserve University | brt6 (at) case.edu |
+| Alexie Pogue | UC San Diego | alexie.pogue (at) gmail.com |
+| Andrew Sabelhaus | UC Berkeley | apsabelhaus (at) berkeley.edu |
+| Vytas SunSpiral | SGT Inc./NASA Ames Research Center | vytas.sunspiral (at) nasa.gov |
+*/
+
+/** \page keys Keyboard Commands
+	\section sec1 Keyboard Commands for NTRT
+	The NTRT GUI supports user interaction through the keyboard.
+	Commands are listed below:
+	
+	- q - quit
+	- spacebar - restart simulation
+	- w - wireframe mode
+	- r/right arrow - rotate the camera counterclockwise (right)
+	- u - change ground texture
+	- i/home - Pause (debug mode, muscles will dissapear
+	- o - set camera to origin
+	- end - Stop/Pause (not supported, will crash)
+	- a - show collision boxes
+	- f/up arrow - rotate camera forward/up
+	- g - shading on/off
+	- h - turn of debugging info (good for videos)
+	- l/left arrow - rotate camera clockwise (left)
+	- ; - Follow center of mass of structure
+	- x/page up - zoom in
+	- z/page down - zoom out
+	- b/down arrow - rotate camera down
+	- . - shoot bullets
+	
+	These are built into our patched Bullet code. Source code location 
+	on your build config, but the default is
+	depends env/build/bullet-2.82-r2704/Demos/OpenGL_FreeGlut\*
+	
+	\*FreeGlut support pending: https://github.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/issues/27
+	
+	\version 1.1.0
+*/
+
+/**
+ \page copyright Copyright
+ Copyright © 2012, United States Government, as represented by the
+ Administrator of the National Aeronautics and Space Administration.
+ All rights reserved.
+ 
+ The NASA Tensegrity Robotics Toolkit (NTRT) v1 platform is licensed
+ under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0.
+ 
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+
+ \version 1.1.0
+*/
+
+/**
+ \page scaling Scaling Analysis
+ For the v1.1 release of NTRT, a short white paper is provided that
+ justifies much of the scaling that's done in the example files and
+ related work.
+
+ Most common situations are covered by this analysis.
+ For example, if the gravitational constant needs to be changed in order to make
+ the computations faster for the underlying C++ math libraries, only a few
+ constants would need to be scaled.
+ In particular, our analysis shows that any length scales, force measurements,
+ velocity measurements, density parameters, and moduli of elasticity must be
+ scaled along with gravitational acceleration.
+ Note that this only applies to current models using the semi-standardized
+ CONFIG structure.
+ See, for example, the SUPERball model under src/examples.
+
+ The white paper is currently available at:
+ src/dev/apsabelhaus/scaling_analysis/scaling_analysis.pdf
+
+ If any errors or corrections are found, please email Drew Sabelhaus
+ at apsabelhaus@berkeley.edu.
+*/

@@ -1,0 +1,305 @@
+** Overview **
+
+This repository contains everything that is needed to set up and build the 
+Tensegrity simulators. The 'env' and 'build' directories that are created
+during setup are considered to be local directories and are ignored in the 
+repository. If you run into problems, you can always delete these and run
+setup again. 
+
+To get started, read the below instructions, then run the setup script 
+(setup.sh). It will walk you through the process of getting everything 
+configured and installed. If you already have some things installed in 
+the standard locations, setup will find those so that
+you don't have to reinstall. However, this functionality may be limited
+based on your linux distribution, so if you're not using Ubuntu 13.10 or 
+14.04, be sure to read below and confirm you have the necessary packages
+in your $PATH. You can run setup as many times as you like without hurting 
+anything.
+
+
+** Linux / Mac Installation **
+
+  ** Prerequisites/Dependencies **
+
+  - Some Linux prerequisites, outside of the setup script file. Make
+    sure the following are installed: 
+    
+    Ubuntu (you can use sudo apt-get install):
+	- g++ (the compiler for cmake)
+	- libglib2.0-dev
+	- curl
+	- freeglut3
+	- freeglut3-dev (glut for bullet graphics)
+	- cmake
+	- build-essential
+        - unzip
+
+    Fedora/CentOS (you can use sudo yum install):
+	- gcc-c++ (the compiler for cmake)
+	- glib2-devel and glib2-devel.i686
+	- curl
+	- freeglut
+	- freeglut-devel
+	- cmake
+	- build-essential
+	- unzip
+
+    MAC OSX (please read the detailed instructions below for OSX 10.9 at the end of this file)
+	-gcc/g++ 4.5 (via Macports or Homebrew)
+		
+  - Also if available, it's sometimes easier to install cmake (and/or boost)
+    from your distro. On ubuntu, sudo apt-get install cmake.
+    If you do this, the script is designed to detect system-wide cmake
+    installations on both Linux and Mac; however, it only correctly
+    detects boost installations on Mac.
+
+  - Installing libboost-all-dev under Ubuntu does NOT place these files
+    where our install script can see them. At the moment, it's easier to 
+    just have our installer download and compile its own version of
+    libboost-1.53.0-dev, as counterintuitive as that seems. See a known
+    issue below about this compilation under Ubuntu 14.04.
+
+  ** Known Issue with GCC/G++ 7 and Ubuntu 18.04 / Debian Stretch **
+
+  - NTRTsim is broken with the newer versions of GNU's C/C++ compilers. A change occurred somewhere 
+    between gcc and g++ 4.8 and version 7 that changed functionality that NTRTsim and/or Bullet 2.82
+    relied upon. A symptom of this error occurs when trying to build (e.g.) the NeuroEvo classes.
+    No known fix allows NTRTsim to be built with these compilers.
+    However, it is possible to install version 4.8 alongside 7 and switch between them.
+    For Ubuntu, as motivated by http://charette.no-ip.com:81/programming/2011-12-24_GCCv47/,
+    the fix is as follows. Please read that link carefully before attempting the fix, to understand what's happening.
+
+    sudo apt-get install g++-4.8
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 40 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+    sudo upate-alternatives --config gcc
+
+    ...and select the 4.8 compiler. You can check which is being used by 
+    ls -lah /usr/bin/g++*
+    ls -lah /etc/alternatives/g++* 
+
+    If you had previously run setup.sh using the 7 series compilers,
+    you must delete all files in env/ and build/ and re-run setup.sh to recompile all
+    libraries with the 4.8 compilers before running bin/build.sh.
+
+  ** Running the setup script **
+
+  - Ensure that all of the dependencies above are installed before running setup.sh. If
+    you realize after successfully running setup.sh that you were missing a dependency,
+    then install the dependency, nuke your existing NTRT install, and do a fresh build from scratch.
+    There are cases (e.g. freeglut3) where setup can finish even if a dependency is missing, but
+    app builds will continue to fail even after you've installed the missing dependency.
+    See issue 211 for more info (https://github.com/NASA-Tensegrity-Robotics-Toolkit/NTRTsim/issues/211)
+
+  - If you want to specify setup options, copy the files in
+    conf/default/ to conf/, removing the .default
+    (for example conf/default/bullet.conf.default becomes conf/bullet.conf)
+    and edit as desired. This can save you time if you already have Boost 
+    installed.
+    You can also just run setup.sh -- it will create the .conf files 
+    for you and allow you to set certain options like the location of your 
+    bullet build if you already have one. 
+
+  - Run setup.sh. (sh setup.sh or bash setup.sh)
+
+  - The setup.sh script may be run multiple times without hurting anything. 
+
+  - To build the the src tree, run bin/build.sh 
+
+    The resulting executables will be located under the 'build' folder.
+
+    To run an app, go to build/examples/SomeApp and run the executable.
+    (for example: build/examples/3_prism/AppPrismModel)
+
+    To build a specific app (after making changes to the source, for instance),
+    go to build/dev/myApp and run 'make' 
+
+  - Create a project in your favorite IDE using the equivalent of 
+    'Create a project using existing source' to point your project to the src 
+    directory. See below for more instructions.
+
+
+** Development Environments **
+
+    During setup, an 'env' directory will be created. This directory is intended to
+    be local to your system and is ignored in the repository. It contains builds of
+    the software installed by setup as well as symlinks needed by CMakeLists.txt
+    for the build process.
+
+    After you create a new project using the existing source (the 'src' directory), 
+    add the include and library paths that have been created during setup. Note
+    that all relative paths listed below (e.g. env/lib) are relative to this 
+    directory. 
+
+      - Add the following to your c++ include paths:
+
+        env/include/bullet
+        env/include/boost
+
+      - You'll also want to add the standard include paths if they're not 
+        already present, e.g.:
+
+        /usr/include
+        /usr/local/include
+        /usr/include/c++/4.2.1 (location of cstdlib header on your system)
+
+      - Add the following to your c++ library paths:
+
+        env/lib
+
+      - If you are working on Mac OSX you will need to include the default framework location
+
+        /Library/Frameworks
+
+      - Also add the standard library paths (may be slightly different for you):
+
+        /usr/lib
+        /usr/local/lib
+
+** Build Options **
+
+  - After the first install, note the following options are available with build.sh (run build.sh -h for an up to date list)
+  
+    positional arguments:
+    build_path            Path to build (relative to src, e.g. 'BasicApp' or
+                           'lib/Example'). Defaults to all if not specified, includes dependancies.
+   
+    optional arguments:
+    -h       Show this help message and exit
+    -c       Run 'make clean' before make/make install on non-library sources
+    -w       Show compiler warnings when building
+    -t       Build test/ rather than src/
+    -r       Build test/ rather than src/ *and* run all tests after compilation.
+    -i       Build test_integration/ rather than src/
+    -g       Build test_integration/ rather than src/ *and* run all tests after compilation.
+
+** Manual Installation **
+
+  - Install cmake (see http://www.cmake.org for details)
+
+  - Install boost in the standard manner (see http://www.boost.org)
+        
+  - Create an 'env' directory in the same directory as this INSTALL file. 
+
+    mkdir env
+  
+  - Create the necessary subdirectories under env:
+
+    cd env
+    mkdir bin build downloads include lib
+    cd ..
+
+    
+  - Create a symlink to cmake under env/bin:
+    
+    cd env/bin
+    ln -s `which cmake` # (or just provide the path, e.g. ln -s /usr/bin/cmake)
+    cd ../..  # back to top level
+
+  - Download and build Bullet Physics:
+    
+    cd env/downloads
+    curl -k -L -O http://bullet.googlecode.com/files/bullet-2.82-r2704.tgz
+    cd ../build
+    tar xzvf ../downloads/bullet-2.82-r2704.tgz
+
+    cd bullet-2.82-r2704/
+    path_to_env=`pwd`/../../../env
+    "$path_to_env/bin/cmake" . -G "Unix Makefiles" \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DBUILD_EXTRAS=ON \
+        -DCMAKE_INSTALL_PREFIX="$path_to_env" \
+        -DCMAKE_INSTALL_NAME_DIR="$path_to_env"
+    make
+    make install
+    cd ..   # back to env/build
+    
+  - Create a 'bullet' symlink to your bullet build under env/build. This will 
+    be expected by CMakeLists.txt
+  
+    ln -s bullet-2.82-r2704 bullet
+    cd ../..   # back to top level
+    
+  - Create the necessary symlinks under env/include. The following values 
+    reflect global installations of boost and gsl; adjust these values if you
+    installed these packages elsewhere (e.g. using --prefix=/path/to/env).
+    
+    cd env/include
+    ln -s /usr/local/include/boost boost
+    cd ../..  # back to top level
+    
+    You should also have a 'bullet' directory under env/include. If not, make 
+    sure to create a symlink that points to the bullet header files.
+    
+    - NOTE: When complete, your 'env' directory must have either directories or
+      symlinks for the following elements:
+
+      env/
+        bin/
+          cmake  # (executable)
+        include/
+          bullet/  # Bullet header files
+          boost/   # Boost header files
+        lib/     # Libraries will be installed here when you build the source.
+
+  - That should do it. You can now run bin/build.sh to build your code.
+    
+** Troubleshooting and Known Issues **
+
+  - Our usage of Git does not respect file permissions well enough
+    on occassion. You may have to "chmod ug+x" our setup.sh and bin/build.sh
+    scripts. 
+
+  - If any of the downloads fail, there may be a corrupt file in env/downloads.
+    Be sure to remove it before running setup/setup.sh again.
+    Similarly, there might be a failed install directory under env/build, if
+    a compilation fails. TO-DO: create a "make clean"-like function for setup.
+
+  - Similarly, this script does not currently check for package integrity
+    before extracting tarballs, and will happily attempt to extract incomplete
+    downloads and then fail. If you get errors, just delete the package's 
+    directory under ./env/downloads and ./env/build
+
+  - Under Ubuntu 14.04, the compile of Boost will exit with errors even though
+    it actually completes successfully. You'll get an exit message like:
+         >> ...failed updating 6 targets...
+         >> ...skipped 18 targets...
+         >> ...updated 11024 targets...
+         >> Install failed
+         >> Boost initialization failed -- exiting now.
+    This is fine. Just run setup.sh again to confirm everything is OK, then
+    move on to running bin/build.sh
+
+  - If you want to recompile a library, when you try and re-run ./setup.sh,
+    remove not only the downloaded file and extracted files under 
+    ./env/build, but also the (failed) compiled files under ./env/include 
+    and ./env/lib, for example, a failed compile of Boost requires deleting 
+    ./env/include/boost and everthing named "libboost" under ./env/lib
+
+  - If you get an error when running bin/build.sh about CMake not "including"
+    a GLIB directory, be sure you've installed libglib2.0-dev (Ubuntu 14.04).
+
+  - A known bug is that some of this code will not compile without the
+    position-independent-code flag, -fPIC, passed in. Though this flag should
+    be enabled by default now, if you do get an error related to -fPIC, just 
+    edit the CMakeLists files to include -fPIC.
+
+  - If you are upgrading from a prior version, be sure to delete your env directory
+    and reinstall it using setup.sh. There have been some changes to the patches,
+    particularly the neuralNetwork code, that are incompatible.
+
+
+** MAC OSX 10.9 installation problem **
+
+	Due to the defaul library being stdlibc++ instead of stdc++, NTRT and 
+	also all the dependencies (boost and bullet) has to be compiled using 
+	gcc. As a temporary solution, please follow these steps:
+
+	1) Install gcc, g++ using macports or homebrew (I used with gcc 4.5.4 through macports).
+	2) Download the github directory
+	3) Edit bin/setup/setup_boost.sh and uncomment this line by deleting '#':
+		#sed -i '' 's/^# using gcc ;/using gcc ;/g' tools/build/v2/user-config.jam
+	4)run setup.sh
+	5)run bin/build.sh
+
+

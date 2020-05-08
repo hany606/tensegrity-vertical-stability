@@ -1,0 +1,49 @@
+Failure # 1 (occurred at 2020-01-25_15-42-00)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/ray/tune/trial_runner.py", line 426, in _process_trial
+    result = self.trial_executor.fetch_result(trial)
+  File "/usr/local/lib/python3.6/dist-packages/ray/tune/ray_trial_executor.py", line 378, in fetch_result
+    result = ray.get(trial_future[0], DEFAULT_GET_TIMEOUT)
+  File "/usr/local/lib/python3.6/dist-packages/ray/worker.py", line 1457, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(NotImplementedError): [36mray::ARSTrainer.train()[39m (pid=18723, ip=172.18.0.6)
+  File "/usr/local/lib/python3.6/dist-packages/ray/tune/trainable.py", line 176, in train
+    result = self._train()
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/ars/ars.py", line 211, in _train
+    theta_id, config["num_rollouts"])
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/ars/ars.py", line 316, in _collect_results
+    for result in ray_get_and_free(rollout_ids):
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/utils/memory.py", line 33, in ray_get_and_free
+    result = ray.get(object_ids)
+ray.exceptions.RayTaskError(ConnectionResetError): [36mray::Worker.do_rollouts()[39m (pid=18698, ip=172.18.0.6)
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/ars/ars.py", line 140, in do_rollouts
+    rewards_pos, lengths_pos = self.rollout(timestep_limit)
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/ars/ars.py", line 112, in rollout
+    offset=self.config["offset"])
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/ars/policies.py", line 49, in rollout
+    observation, rew, done, _ = env.step(ac)
+  File "/root/hany606/Tensegrity-Robotics/src/dev/gym-tensegrity/gym_tensegrity/envs/jumper_env.py", line 185, in step
+    self._takeAction(action)
+  File "/root/hany606/Tensegrity-Robotics/src/dev/gym-tensegrity/gym_tensegrity/envs/jumper_env.py", line 248, in _takeAction
+    self.env.step()
+  File "/root/hany606/Tensegrity-Robotics/src/dev/gym-tensegrity/gym_tensegrity/envs/jumper_model.py", line 156, in step
+    sim_raw_data = self.read()
+  File "/root/hany606/Tensegrity-Robotics/src/dev/gym-tensegrity/gym_tensegrity/envs/jumper_model.py", line 103, in read
+    data.append(self.connection.recv(self.packet_size).decode("utf-8"))         #reading part
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+[36mray::ARSTrainer.train()[39m (pid=18723, ip=172.18.0.6)
+  File "python/ray/_raylet.pyx", line 633, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 634, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 636, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 619, in ray._raylet.execute_task.function_executor
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/trainer.py", line 438, in train
+    self._try_recover()
+  File "/usr/local/lib/python3.6/dist-packages/ray/rllib/agents/trainer.py", line 799, in _try_recover
+    "Recovery is not supported for this algorithm")
+NotImplementedError: Recovery is not supported for this algorithm
+

@@ -1,0 +1,19 @@
+{
+  "env": "jumper",
+  "env_config": {
+    "control_type": "rest_length_mod",
+    "observation": [
+      "end_points",
+      "end_points_velocities",
+      "rest_length"
+    ]
+  },
+  "eval_prob": 0.5,
+  "ignore_worker_failures": true,
+  "noise_size": 250000000,
+  "noise_stdev": 0.025,
+  "num_rollouts": 100,
+  "num_workers": 10,
+  "rollouts_used": 50,
+  "sgd_stepsize": 0.03
+}

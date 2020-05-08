@@ -1,0 +1,15 @@
+/**
+ * \dir controllers 
+ * @brief controllers for tensegrities in the examples and models directories.
+ 
+ For a detailed description see page controllers
+  
+ \page controllers Controllers
+ The controllers library contains classes that can be used to
+ control a low level components of tensegrities, typically spring-cable actuators.
+ These range from the very simple tgBasicController to the higher level
+ tgImpedanceController.
+ It depends on the core library
+ 
+ \version 1.1.0
+ */
